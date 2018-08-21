@@ -39,6 +39,12 @@ Version: 1.0
  .uams-thinstrip ul.uams-thin-links li button {
      color: #fff;
  }
+ .uams-thinstrip ul.uams-thin-links li a:hover,
+ .uams-thinstrip ul.uams-thin-links li button:hover,
+ .uams-thinstrip ul.uams-thin-links li a:focus,
+ .uams-thinstrip ul.uams-thin-links li button:focus {
+     color: #F0EEEF;
+ }
  .uams-thinstrip ul.uams-thin-links li {
      display: none;
  }
@@ -114,7 +120,7 @@ Version: 1.0
     #mobile-reddiedrops button.uams-mobile-menu-toggle,
     #mobile-relative button.uams-mobile-menu-toggle {
         color: #fff;
-        background: url(assets/svg/inside-sprite.svg) no-repeat 10px 20px/300px #0000;
+        background: url(assets/svg/inside-sprite.svg) no-repeat 10px 20px/480px #0000;
     }
     .uams-thinstrip button.uams-quicklinks {
         background-position: -278px -1px;

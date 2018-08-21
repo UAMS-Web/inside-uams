@@ -1,0 +1,125 @@
+/*!
+Theme Name: Puget Sound
+Theme URI: uams.edu
+Description: InsideUAMS Child for UAMS Theme 
+Author: UAMS Web Team
+Author URI: http://uams.edu
+Template: uams-2016
+Version: 1.0
+ */
+/* Header/Thinstrip Modifications */
+ .uams-thinstrip {
+    background: #9D2235;
+    padding-top: 14px;
+ }
+ .uams-thinstrip .thin-nav {
+     margin-top: 0;
+ }
+ .uams-thinstrip #top-header {
+     background-color: transparent;
+ }
+ .uams-thinstrip .container {
+     position: absolute;
+     width: 100%;
+     padding: 0;
+ }
+ .uams-thinstrip .uams-patch {
+    right: auto;
+    left: 5%;
+    height: 60px;
+    top: 7px;
+ }
+ .uams-primary .uams-thinstrip .uams-patch {
+    right: auto;
+    left: 5%;
+    height: 60px;
+    top: 6px;
+ }
+ .uams-thinstrip ul.uams-thin-links li a, 
+ .uams-thinstrip ul.uams-thin-links li button {
+     color: #fff;
+ }
+ .uams-thinstrip ul.uams-thin-links li {
+     display: none;
+ }
+ .uams-primary .uams-thinstrip ul.uams-thin-links li {
+     display: inherit;
+ }
+ .uams-thinstrip button.uams-search {
+    background-color: #767475;
+ }
+.uams-thinstrip button.uams-search:hover,
+.uams-thinstrip button.uams-search:focus {
+    background-color: #5D5B5C;
+    border-color: #F5F3F4;
+}
+.uams-thinstrip button.uams-quicklinks {
+    background: url(assets/svg/inside-sprite.svg) no-repeat -30px 0px;
+}
+ #site-title {
+    padding-left: 5%; /* Match left of uams-patch */
+    left: 5px;
+}
+#site-title h1 {
+     font-weight: 300;
+}
+#site-title h1 a {
+     color: #fff;
+}
+#site-title h1 a:hover, #site-title h1 a:focus {
+     color: #eee;
+     border-bottom-color: #eee; 
+}
+.uams-thinstrip div.align-right #search-quicklinks {
+     min-width: 245px;
+}
+@media only screen and (max-width: 991px) and (min-width: 769px) {
+    .uams-thinstrip .uams-patch,
+    .uams-primary .uams-thinstrip .uams-patch {
+        left: 2%;
+    }
+    #site-title {
+        height: 87px;
+        max-width: 43%;
+        padding-left: 2%;
+    }
+}
+@media only screen and (min-width: 769px) {
+    .uams-thinstrip,
+    .uams-primary .uams-thinstrip {
+        height: 87px;
+    }
+    .uams-thinstrip .uams-patch {
+        background-size: 1080px;
+        width: 200px;
+    }
+    .uams-thinstrip .uams-patch:focus,
+    .uams-thinstrip .uams-patch:hover {
+        background-size: 1080px;
+    }
+    #site-title {
+        top: -19px;
+        left: 210px; 
+        max-width: 55%;
+   }
+}
+@media only screen and (max-width: 768px) {
+    .uams-thinstrip {
+        border-top-color: #767475;
+    }
+    .uams-primary .uams-thinstrip ul.uams-thin-links li, 
+    .uams-thinstrip ul.uams-thin-links li {
+        display: none;
+    }
+    #mobile-reddiedrops button.uams-mobile-menu-toggle,
+    #mobile-relative button.uams-mobile-menu-toggle {
+        color: #fff;
+        background: url(assets/svg/inside-sprite.svg) no-repeat 10px 20px/300px #0000;
+    }
+    .uams-thinstrip button.uams-quicklinks {
+        background-position: -278px -1px;
+    }
+    #site-title {
+        top: 52px;
+    }
+}

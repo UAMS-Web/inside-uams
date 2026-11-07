@@ -1,0 +1,14 @@
+{
+    "name": "uams-web/inside-uams",
+    "description": "Development-only Composer setup for the InsideUAMS child theme. It installs nothing into production.",
+    "type": "wordpress-theme",
+    "require": {
+        "php": ">=8.2"
+    },
+    "config": {
+        "platform": {
+            "php": "8.4.27"
+        },
+        "sort-packages": true
+    }
+}

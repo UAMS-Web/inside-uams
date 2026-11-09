@@ -1,0 +1,44 @@
+name: Lint floor
+
+# Parses every shipped PHP file with the supported floor, PHP 8.2, so syntax newer than the floor
+# fails here even though development and tests run on PHP 8.4. `vendor/` and `tests/` are left out:
+# the tests run only on the development PHP and may use its syntax.
+# The `tests` skill's "The floor lint job" section in UAMS-Web/uams-claude-skills describes the job.
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  lint-floor:
+    name: Lint floor (PHP 8.2)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Parse every shipped PHP file on PHP 8.2
+        run: |
+          php -v
+          count=0
+          while IFS= read -r -d '' file; do
+            count=$((count + 1))
+            php -l "$file" > /dev/null || { echo "::error file=$file::Not parseable on PHP 8.2"; exit 1; }
+          done < <(find . -type f -name '*.php' -not -path './vendor/*' -not -path './tests/*' -not -path './.git/*' -print0)
+          # An empty find would pass having parsed nothing.
+          if [ "$count" -eq 0 ]; then echo "::error::No PHP files found to lint"; exit 1; fi
+          echo "Parsed $count files on PHP 8.2"

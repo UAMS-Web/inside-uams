@@ -14,7 +14,9 @@ name: CI
 # minutes, and one where it is unset runs the chain (free on a public repository). A skipped
 # `CI` counts as success to a ruleset, so a skipped run proves nothing.
 #
-# Mutation testing is off (`mutate: false`) until its own ticket turns it on.
+# Mutation testing is off (`mutate: false`) until its own ticket turns it on. The chain's
+# `download-archive` job runs the synced download-archive-check script, which sits under `.claude/skills/`
+# and not at the chain's default `scripts/` path.
 
 on:
   pull_request:
@@ -51,6 +53,8 @@ jobs:
     with:
       linux-only: true
       mutate: false
+      download-archive: true
+      download-archive-command: node .claude/skills/download-archive-check/check-download-archive.mjs
 
   # The one check a ruleset requires from this workflow. Keep `needs:` naming the call;
   # scripts/check-templates.mjs in UAMS-Web/uams-claude-skills checks it.

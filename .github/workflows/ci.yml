@@ -14,8 +14,8 @@ name: CI
 # minutes, and one where it is unset runs the chain (free on a public repository). A skipped
 # `CI` counts as success to a ruleset, so a skipped run proves nothing.
 #
-# Mutation testing is off (`mutate: false`) until its own ticket turns it on. The chain's
-# `download-archive` job runs the synced download-archive-check script, which sits under `.claude/skills/`
+# Mutation testing is on: the chain's `mutate` job runs `composer mutate` over the first-party PHP named
+# in `mutate-paths`. The chain's `download-archive` job runs the synced download-archive-check script, which sits under `.claude/skills/`
 # and not at the chain's default `scripts/` path.
 
 on:
@@ -52,7 +52,8 @@ jobs:
     uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.10.0
     with:
       linux-only: true
-      mutate: false
+      mutate-paths: functions.php setup
+      mutate-ignore-paths: setup tests
       download-archive: true
       download-archive-command: node .claude/skills/download-archive-check/check-download-archive.mjs
 

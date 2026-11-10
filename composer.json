@@ -34,7 +34,8 @@
         "test:refactor": "rector --dry-run",
         "test:refactor:sweep": "rector --dry-run --clear-cache --config=rector-sweep.php",
         "pint": "pint",
-        "test:pint": "pint --test"
+        "test:pint": "pint --test",
+        "mutate": "pest tests/Unit --mutate --covered-only --path=functions.php,setup"
     },
     "scripts-descriptions": {
         "stan": "Run PHPStan over the first-party code.",
@@ -45,6 +46,7 @@
         "test:refactor": "Preview Rector's gating profile; fails when it would change a file.",
         "test:refactor:sweep": "Preview Rector's sweep profile.",
         "pint": "Format the first-party code with Pint.",
-        "test:pint": "Check formatting with Pint; fails when it would change a file."
+        "test:pint": "Check formatting with Pint; fails when it would change a file.",
+        "mutate": "Run Pest mutation testing over the first-party source (needs a coverage driver; the closing measurement is a Linux run)."
     }
 }

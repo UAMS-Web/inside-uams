@@ -12,6 +12,13 @@ class Institute_QuickLinks
 
     const LOCATION = 'quick-links';
 
+    /**
+     * The nav menu items the feed serves, once loaded: false when WordPress finds no such menu.
+     *
+     * @var array<int, object>|false|null
+     */
+    private array|false|null $items = null;
+
     public function __construct()
     {
 
@@ -41,7 +48,7 @@ class Institute_QuickLinks
 
     public function parse_menu(): array
     {
-        if (property_exists($this, 'items') && $this->items !== null) {
+        if (is_array($this->items)) {
             foreach ($this->items as $item) {
                 // Only keep the necessary keys of the $item
                 $item = array_intersect_key((array) $item, array_fill_keys(['ID', 'title', 'url', 'classes', 'menu_item_parent'], null));

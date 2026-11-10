@@ -52,7 +52,7 @@ jobs:
     uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.10.0
     with:
       linux-only: true
-      mutate: false
+      mutate: true
       download-archive: true
       download-archive-command: node .claude/skills/download-archive-check/check-download-archive.mjs
 

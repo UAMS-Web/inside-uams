@@ -39,6 +39,7 @@ when('get_template_directory')->justReturn(dirname(__DIR__));
 when('get_stylesheet_directory')->justReturn(dirname(__DIR__));
 
 require_once __DIR__.'/../functions.php';
+require_once __DIR__.'/../setup/class.uams-quicklinks.php';
 
 tearDown();
 

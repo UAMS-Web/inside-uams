@@ -156,14 +156,6 @@ parameters:
             identifier: function.notFound
             message: '#^Function uams_is_custom_post_type not found\.$#'
             path: functions.php
-        # Institute_QuickLinks writes $this->items without declaring it, a
-        # dynamic property; the class is not loaded (its require is commented
-        # out in functions.php).
-        -
-            identifier: property.notFound
-            message: '#^Access to an undefined property Institute_QuickLinks::\$items\.$#'
-            path: setup/class.uams-quicklinks.php
-            count: 2
         # The entry most plugins need once the level reaches 4, from
         # aether-wordpress-migration-api: the PHP version guard in the plugin header.
         # PHPStan analyzes at the `min` above, so

@@ -21,12 +21,12 @@ class Institute_QuickLinks
         add_action('wp_ajax_nopriv_quicklinks', [$this, 'uams_quicklinks_feed']);
     }
 
-    public function register_quick_links_menu()
+    public function register_quick_links_menu(): void
     {
         register_nav_menu(self::LOCATION, __(self::NAME));
     }
 
-    public function uams_quicklinks_feed()
+    public function uams_quicklinks_feed(): void
     {
 
         $locations = get_nav_menu_locations();
@@ -39,10 +39,10 @@ class Institute_QuickLinks
         wp_send_json($this->parse_menu());
     }
 
-    public function parse_menu()
+    public function parse_menu(): array
     {
-        if (isset($this->items)) {
-            foreach ($this->items as $index => $item) {
+        if (property_exists($this, 'items') && $this->items !== null) {
+            foreach ($this->items as $item) {
                 // Only keep the necessary keys of the $item
                 $item = array_intersect_key((array) $item, array_fill_keys(['ID', 'title', 'url', 'classes', 'menu_item_parent'], null));
 
@@ -55,7 +55,8 @@ class Institute_QuickLinks
             }
         }
 
-        return isset($menu) ? $menu : [];
+        return $menu ?? [];
     }
 }
+
 new Institute_QuickLinks;

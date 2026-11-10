@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 class Institute_QuickLinks
 {
+    // scratch change to exercise changed-file mutation
     const NAME = 'Quick Links';
 
     const LOCATION = 'quick-links';

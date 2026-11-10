@@ -35,7 +35,7 @@
         "test:refactor:sweep": "rector --dry-run --clear-cache --config=rector-sweep.php",
         "pint": "pint",
         "test:pint": "pint --test",
-        "mutate": "pest tests/Unit/BreadcrumbsTest.php tests/Unit/QuickLinksTest.php --mutate --covered-only --path=functions.php,setup"
+        "mutate": "pest tests/Unit/BreadcrumbsTest.php tests/Unit/QuickLinksTest.php --mutate --path=functions.php,setup"
     },
     "scripts-descriptions": {
         "stan": "Run PHPStan over the first-party code.",

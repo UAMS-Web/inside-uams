@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
-* Add an automatic default custom taxonomy for calendar.
-* If no event (taxonomy) is set, the event will be sorted as “draft” and won’t return an offset error.
-*/
+ * Add an automatic default custom taxonomy for calendar.
+ * If no event (taxonomy) is set, the event will be sorted as “draft” and won’t return an offset error.
+ */
 
 // Fix ACF Support
 add_filter('_includes/acf-pro/settings/show_admin', '__return_true');
@@ -13,7 +13,7 @@ add_filter('_includes/acf-pro/settings/show_admin', '__return_true');
 // require( 'setup/class.uams-quicklinks.php' );
 
 // Breadcrumbs
-function get_uams_breadcrumbs()
+function get_uams_breadcrumbs(): string
 {
 
     global $post;
@@ -69,6 +69,7 @@ function get_uams_breadcrumbs()
                 $category = array_shift($thecat);
                 $html .= '<li><a href="'.get_category_link($category->term_id).'" title="'.get_cat_name($category->term_id).'">'.get_cat_name($category->term_id).'</a>';
             }
+
             if (uams_is_custom_post_type()) {
                 $posttype = get_post_type_object(get_post_type());
                 $archive_link = get_post_type_archive_link($posttype->query_var);
@@ -78,6 +79,7 @@ function get_uams_breadcrumbs()
                     $html .= '<li><a href="'.site_url('/'.$posttype->rewrite['slug'].'/').'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a>';
                 }
             }
+
             $html .= '<li class="current"><span>'.get_the_title($post->ID).'</span>';
         }
     }
@@ -91,7 +93,7 @@ function get_uams_breadcrumbs()
 
         if (! is_front_page()) {
             foreach (array_filter($ancestors) as $index => $ancestor) {
-                $class = $index + 1 == count($ancestors) ? ' class="current" ' : '';
+                $class = $index + 1 === count($ancestors) ? ' class="current" ' : '';
                 $page = get_post($ancestor);
                 $url = get_permalink($page->ID);
                 $title_attr = esc_attr($page->post_title);

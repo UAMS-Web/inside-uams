@@ -1,0 +1,5 @@
+{
+    "bands": {
+        "suite": { "expected": 0, "why": "No test is skipped." }
+    }
+}

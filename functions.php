@@ -87,11 +87,9 @@ function get_uams_breadcrumbs(): string
     // If the current view is a page then the breadcrumbs will be parent pages.
     elseif (is_page()) {
 
-        if (! is_home() || ! is_front_page()) {
-            $ancestors[] = $post->ID;
-        }
-
         if (! is_front_page()) {
+            $ancestors[] = $post->ID;
+
             foreach (array_filter($ancestors) as $index => $ancestor) {
                 $class = $index + 1 === count($ancestors) ? ' class="current" ' : '';
                 $page = get_post($ancestor);

@@ -191,18 +191,19 @@ describe('a single post', function (): void {
     });
 
     it('links the first category before the title', function (): void {
+        when('get_category_link')->alias(fn (int $id): string => "https://inside.uams.edu/category/cat-$id/");
+        when('get_cat_name')->alias(fn (int $id): string => "Cat $id");
+
         $html = breadcrumb_trail([
             'is_single' => true,
             'has_category' => true,
             'get_the_category' => [(object) ['term_id' => 4], (object) ['term_id' => 5]],
-            'get_category_link' => 'https://inside.uams.edu/category/news/',
-            'get_cat_name' => 'News',
             'uams_is_custom_post_type' => false,
             'get_the_title' => 'Welcome',
         ]);
 
         expect($html)->toBe(breadcrumb_nav(
-            '<li><a href="https://inside.uams.edu/category/news/" title="News">News</a>'
+            '<li><a href="https://inside.uams.edu/category/cat-4/" title="Cat 4">Cat 4</a>'
             .'<li class="current"><span>Welcome</span>'
         ));
     });
@@ -341,6 +342,25 @@ describe('a page', function (): void {
         $html = breadcrumb_trail(['is_page' => true, 'is_home' => true]);
 
         expect($html)->toBe(breadcrumb_nav('<li  class="current" ><span>Child</span></li>'));
+    });
+
+    it('skips an ancestor id that is empty', function (): void {
+        when('get_post')->alias(function (int $id): object {
+            if ($id === 0) {
+                throw new LogicException('An empty ancestor id was looked up.');
+            }
+
+            return (object) ['ID' => $id, 'post_title' => "P$id"];
+        });
+        when('get_permalink')->alias(fn (int $id): string => "/p$id/");
+        when('esc_attr')->returnArg();
+
+        $html = breadcrumb_trail(['is_page' => true, 'get_post_ancestors' => [0, 10]]);
+
+        expect($html)->toBe(breadcrumb_nav(
+            '<li><a href="/p10/" title="P10">P10</a></li>'
+            .'<li  class="current" ><span>P1</span></li>'
+        ));
     });
 
     it('escapes the title attribute of an ancestor link', function (): void {

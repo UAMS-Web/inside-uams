@@ -56,6 +56,8 @@ class Institute_QuickLinks
         if (is_array($this->items)) {
             foreach ($this->items as $item) {
                 // Only keep the necessary keys of the $item
+                // Every nav menu item object carries these five properties.
+                /** @var array{ID: int, title: string, url: string, classes: array<int, string>, menu_item_parent: string} $item */
                 $item = array_intersect_key((array) $item, array_fill_keys(['ID', 'title', 'url', 'classes', 'menu_item_parent'], null));
 
                 if (! $item['classes'][0]) {

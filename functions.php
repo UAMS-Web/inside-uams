@@ -58,7 +58,6 @@ function get_uams_breadcrumbs(): string
 
         if (is_tax() && is_post_type_archive()) {
             $tax = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
-            $posttype = get_post_type_object(get_post_type());
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             $html .= '<li class="current"><span>'.$tax->name.'</span>';
         }

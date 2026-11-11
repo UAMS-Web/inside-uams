@@ -32,7 +32,7 @@ function get_uams_breadcrumbs(): string
         /** @var WP_User $author */
         $author = get_queried_object();
         $html .= '<li class="current"><span> Author: '.$author->display_name.'</span>';
-    } elseif (get_queried_object_id() === (int) get_option('page_for_posts')) {
+    } elseif (get_queried_object_id() === (int) get_option('page_for_posts')) { // @phpstan-ignore cast.int (the page_for_posts option is an integer string)
         $html .= '<li class="current"><span> '.get_the_title(get_queried_object_id()).' </span>';
     }
 
@@ -51,6 +51,7 @@ function get_uams_breadcrumbs(): string
         if (is_category()) {
             // A category archive resolves its own term, so this is a WP_Term, never WP_Error or null.
             /** @var WP_Term $category */
+            // @phpstan-ignore argument.type (the cat query var is an integer string)
             $category = get_category(get_query_var('cat'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             $html .= '<li class="current"><span>'.get_cat_name($category->term_id).'</span>';
@@ -59,8 +60,10 @@ function get_uams_breadcrumbs(): string
         if (is_tax() && ! is_post_type_archive()) {
             // On a taxonomy archive the queried term and its taxonomy both exist.
             /** @var WP_Term $term */
+            // @phpstan-ignore argument.type, argument.type (the term and taxonomy query vars are strings)
             $term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
             /** @var WP_Taxonomy $tax */
+            // @phpstan-ignore argument.type (the taxonomy query var is a string)
             $tax = get_taxonomy(get_query_var('taxonomy'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             $html .= '<li class="current"><span>'.$tax->labels->name.': '.$term->name.'</span>';
@@ -69,6 +72,7 @@ function get_uams_breadcrumbs(): string
         if (is_tax() && is_post_type_archive()) {
             // On a taxonomy archive the queried term exists.
             /** @var WP_Term $tax */
+            // @phpstan-ignore argument.type, argument.type (the term and taxonomy query vars are strings)
             $tax = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             $html .= '<li class="current"><span>'.$tax->name.'</span>';

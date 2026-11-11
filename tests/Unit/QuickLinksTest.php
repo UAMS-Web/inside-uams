@@ -8,12 +8,13 @@ use function Brain\Monkey\Functions\stubTranslationFunctions;
 use function Brain\Monkey\Functions\when;
 
 /**
- * Pins Institute_QuickLinks: the hooks it registers, the menu it registers, and
- * the JSON feed it builds from the menu items.
+ * An Institute_QuickLinks built without its constructor, so no hook is
+ * registered and the methods under test run on a bare instance.
  */
-beforeEach(function (): void {
-    $this->links = (new ReflectionClass(Institute_QuickLinks::class))->newInstanceWithoutConstructor();
-});
+function quicklinks_instance(): Institute_QuickLinks
+{
+    return (new ReflectionClass(Institute_QuickLinks::class))->newInstanceWithoutConstructor();
+}
 
 /**
  * A nav menu item as wp_get_nav_menu_items() returns it, with extra fields the
@@ -34,6 +35,8 @@ function quicklink_item(int $id, array $classes = ['']): object
     ];
 }
 
+// Pins Institute_QuickLinks: the hooks it registers, the menu it registers, and
+// the JSON feed it builds from the menu items.
 it('hooks the menu registration and both AJAX feeds from its constructor', function (): void {
     $links = new Institute_QuickLinks;
 
@@ -46,7 +49,7 @@ it('registers the Quick Links nav menu location', function (): void {
     stubTranslationFunctions();
     Functions\expect('register_nav_menu')->once()->with('quick-links', 'Quick Links');
 
-    $this->links->register_quick_links_menu();
+    quicklinks_instance()->register_quick_links_menu();
 });
 
 describe('the feed', function (): void {
@@ -57,7 +60,7 @@ describe('the feed', function (): void {
             ['ID' => 1, 'title' => 'Link 1', 'url' => 'https://inside.uams.edu/1/', 'classes' => false, 'menu_item_parent' => '0'],
         ]);
 
-        $this->links->uams_quicklinks_feed();
+        quicklinks_instance()->uams_quicklinks_feed();
     });
 
     it('falls back to the menu named after the location', function (): void {
@@ -66,7 +69,7 @@ describe('the feed', function (): void {
         Functions\expect('wp_get_nav_menu_items')->once()->with(77)->andReturn([quicklink_item(2)]);
         Functions\expect('wp_send_json')->once()->with(Mockery::on(fn (array $menu): bool => count($menu) === 1 && $menu[0]['ID'] === 2));
 
-        $this->links->uams_quicklinks_feed();
+        quicklinks_instance()->uams_quicklinks_feed();
     });
 
     it('sends an empty list when no menu exists', function (): void {
@@ -76,13 +79,13 @@ describe('the feed', function (): void {
         Functions\expect('wp_get_nav_menu_items')->never();
         Functions\expect('wp_send_json')->once()->with([]);
 
-        $this->links->uams_quicklinks_feed();
+        quicklinks_instance()->uams_quicklinks_feed();
     });
 });
 
 describe('parse_menu', function (): void {
     it('returns an empty list before any items are loaded', function (): void {
-        expect($this->links->parse_menu())->toBe([]);
+        expect(quicklinks_instance()->parse_menu())->toBe([]);
     });
 
     it('returns an empty list when the menu has no items', function (): void {
@@ -90,9 +93,10 @@ describe('parse_menu', function (): void {
         when('wp_get_nav_menu_items')->justReturn([]);
         when('wp_send_json')->justReturn();
 
-        $this->links->uams_quicklinks_feed();
+        $links = quicklinks_instance();
+        $links->uams_quicklinks_feed();
 
-        expect($this->links->parse_menu())->toBe([]);
+        expect($links->parse_menu())->toBe([]);
     });
 
     it('returns an empty list when the menu lookup yields false', function (): void {
@@ -100,9 +104,10 @@ describe('parse_menu', function (): void {
         when('wp_get_nav_menu_items')->justReturn(false);
         when('wp_send_json')->justReturn();
 
-        $this->links->uams_quicklinks_feed();
+        $links = quicklinks_instance();
+        $links->uams_quicklinks_feed();
 
-        expect($this->links->parse_menu())->toBe([]);
+        expect($links->parse_menu())->toBe([]);
     });
 
     it('keeps only the five feed keys, in menu order', function (): void {
@@ -110,9 +115,10 @@ describe('parse_menu', function (): void {
         when('wp_get_nav_menu_items')->justReturn([quicklink_item(1, ['a', 'b']), quicklink_item(2, ['c'])]);
         when('wp_send_json')->justReturn();
 
-        $this->links->uams_quicklinks_feed();
+        $links = quicklinks_instance();
+        $links->uams_quicklinks_feed();
 
-        expect($this->links->parse_menu())->toBe([
+        expect($links->parse_menu())->toBe([
             ['ID' => 1, 'title' => 'Link 1', 'url' => 'https://inside.uams.edu/1/', 'classes' => ['a', 'b'], 'menu_item_parent' => '0'],
             ['ID' => 2, 'title' => 'Link 2', 'url' => 'https://inside.uams.edu/2/', 'classes' => ['c'], 'menu_item_parent' => '0'],
         ]);
@@ -123,9 +129,10 @@ describe('parse_menu', function (): void {
         when('wp_get_nav_menu_items')->justReturn([quicklink_item(1, ['']), quicklink_item(2, ['0'])]);
         when('wp_send_json')->justReturn();
 
-        $this->links->uams_quicklinks_feed();
+        $links = quicklinks_instance();
+        $links->uams_quicklinks_feed();
 
-        $menu = $this->links->parse_menu();
+        $menu = $links->parse_menu();
 
         expect($menu[0]['classes'])->toBeFalse()
             ->and($menu[1]['classes'])->toBeFalse();

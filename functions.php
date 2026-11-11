@@ -40,7 +40,8 @@ function get_uams_breadcrumbs(): string
     if (is_category() || is_tax() || is_single() || is_post_type_archive()) {
 
         if (is_post_type_archive() && ! is_tax()) {
-            // On a post type archive get_post_type() is a string, not false.
+            // On a post type archive get_post_type() is a string, not false, and its type is registered.
+            /** @var WP_Post_Type $posttype */
             // @phpstan-ignore argument.type
             $posttype = get_post_type_object(get_post_type());
             // $html .=  '<li class="current"><a href="'  . get_post_type_archive_link( $posttype->query_var ) .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
@@ -76,12 +77,15 @@ function get_uams_breadcrumbs(): string
         if (is_single()) {
             if (has_category()) {
                 $thecat = get_the_category($post->ID);
+                // has_category() is true, so the post has at least one category term.
+                /** @var WP_Term $category */
                 $category = array_shift($thecat);
                 $html .= '<li><a href="'.get_category_link($category->term_id).'" title="'.get_cat_name($category->term_id).'">'.get_cat_name($category->term_id).'</a>';
             }
 
             if (uams_is_custom_post_type()) {
                 // A single post's type is a string, and uams_is_custom_post_type() means it is registered.
+                /** @var WP_Post_Type $posttype */
                 // @phpstan-ignore argument.type
                 $posttype = get_post_type_object(get_post_type());
                 // query_var is a string for any type with an archive; false only for types without one.
@@ -106,6 +110,8 @@ function get_uams_breadcrumbs(): string
 
             foreach (array_filter($ancestors) as $index => $ancestor) {
                 $class = $index + 1 === count($ancestors) ? ' class="current" ' : '';
+                // Every id here is the current page or one of its ancestors, so the post exists.
+                /** @var WP_Post $page */
                 $page = get_post($ancestor);
                 $url = get_permalink($page->ID);
                 $title_attr = esc_attr($page->post_title);

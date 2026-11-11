@@ -46,6 +46,11 @@ class Institute_QuickLinks
         wp_send_json($this->parse_menu());
     }
 
+    /**
+     * The feed's menu entries, each limited to the five keys the feed serves.
+     *
+     * @return array<int, array<string, mixed>>
+     */
     public function parse_menu(): array
     {
         if (is_array($this->items)) {

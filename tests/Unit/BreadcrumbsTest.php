@@ -119,11 +119,16 @@ describe('the exclusive views', function (): void {
     });
 
     it('prefers a 404 over a search and a search over an author archive', function (): void {
-        expect(breadcrumb_trail(['is_404' => true, 'is_search' => true, 'is_author' => true]))
-            ->toContain('Ooops!')->not->toContain('Search results')->not->toContain('Author:');
+        $notFound = breadcrumb_trail(['is_404' => true, 'is_search' => true, 'is_author' => true]);
 
-        expect(breadcrumb_trail(['is_search' => true, 'is_author' => true, 'get_search_query' => 'q']))
-            ->toContain('Search results for q')->not->toContain('Author:');
+        expect($notFound)->toContain('Ooops!')
+            ->and($notFound)->not->toContain('Search results')
+            ->and($notFound)->not->toContain('Author:');
+
+        $search = breadcrumb_trail(['is_search' => true, 'is_author' => true, 'get_search_query' => 'q']);
+
+        expect($search)->toContain('Search results for q')
+            ->and($search)->not->toContain('Author:');
     });
 });
 

@@ -15,7 +15,7 @@ class Institute_QuickLinks
     /**
      * The nav menu items the feed serves, once loaded: false when WordPress finds no such menu.
      *
-     * @var array<int, object>|false|null
+     * @var array<mixed>|false|null
      */
     private array|false|null $items = null;
 

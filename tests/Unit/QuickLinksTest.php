@@ -67,7 +67,9 @@ describe('the feed', function (): void {
         when('get_nav_menu_locations')->justReturn(['primary' => 5]);
         Functions\expect('wp_get_nav_menu_object')->once()->with('quick-links')->andReturn((object) ['term_id' => 77]);
         Functions\expect('wp_get_nav_menu_items')->once()->with(77)->andReturn([quicklink_item(2)]);
-        Functions\expect('wp_send_json')->once()->with(Mockery::on(fn (array $menu): bool => count($menu) === 1 && $menu[0]['ID'] === 2));
+        Functions\expect('wp_send_json')->once()->with([
+            ['ID' => 2, 'title' => 'Link 2', 'url' => 'https://inside.uams.edu/2/', 'classes' => false, 'menu_item_parent' => '0'],
+        ]);
 
         quicklinks_instance()->uams_quicklinks_feed();
     });

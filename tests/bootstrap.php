@@ -27,8 +27,15 @@ if (! defined('ABSPATH')) {
  * functions.php registers hooks and calls WordPress at file scope, so it is
  * loaded inside one Brain Monkey session with what it calls at load time
  * stubbed. The functions it defines outlive the session; the hooks it
- * registered are discarded by tearDown(), so every test starts clean, and hook
- * registration is asserted in the Integration suite.
+ * registered are discarded by tearDown(), so every test starts clean.
+ *
+ * Known gap (UAMS-Web/inside-uams#40): the file-scope add_filter() for
+ * `_includes/acf-pro/settings/show_admin` runs here, outside every test, so no
+ * test notices if it is removed, and a mutation run without `--covered-only`
+ * reports it as the one uncovered mutant. There is no Integration suite to
+ * assert it on real WordPress; adding one (PHPUnit 9.6, wp-phpunit, MySQL and
+ * a CI job) for a single `has_filter()` check costs more than the line is
+ * worth, so the gap is left in place.
  *
  * Add a stub here for each WordPress function the theme's functions.php calls
  * at file scope (wp_get_theme(), get_stylesheet_directory_uri(), ...).

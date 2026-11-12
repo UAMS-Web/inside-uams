@@ -28,6 +28,7 @@ uses()
         setUp();
     })
     ->afterEach(function (): void {
+        // @phpstan-ignore method.nonObject (Pest binds $this to the running test case)
         $this->addToAssertionCount(Mockery::getContainer()->mockery_getExpectationCount());
 
         tearDown();

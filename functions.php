@@ -16,6 +16,8 @@ add_filter('_includes/acf-pro/settings/show_admin', '__return_true');
 function get_uams_breadcrumbs(): string
 {
 
+    // The template that calls this runs on a singular or archive view, where the global post is set.
+    /** @var WP_Post $post */
     global $post;
     $ancestors = array_reverse(get_post_ancestors($post->ID));
     $html = '<li><a href="http://inside.uams.edu" title="University of Arkansas for Medical Scineces">Home</a></li>';
@@ -45,6 +47,7 @@ function get_uams_breadcrumbs(): string
             // @phpstan-ignore argument.type
             $posttype = get_post_type_object(get_post_type());
             // $html .=  '<li class="current"><a href="'  . get_post_type_archive_link( $posttype->query_var ) .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
+            // @phpstan-ignore binaryOp.invalid (a registered post type's menu_name label is a string)
             $html .= '<li class="current"><span>'.$posttype->labels->menu_name.'</span>';
         }
 
@@ -66,6 +69,7 @@ function get_uams_breadcrumbs(): string
             // @phpstan-ignore argument.type (the taxonomy query var is a string)
             $tax = get_taxonomy(get_query_var('taxonomy'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
+            // @phpstan-ignore binaryOp.invalid (a registered taxonomy's name label is a string)
             $html .= '<li class="current"><span>'.$tax->labels->name.': '.$term->name.'</span>';
         }
 
@@ -96,8 +100,10 @@ function get_uams_breadcrumbs(): string
                 // @phpstan-ignore argument.type
                 $archive_link = get_post_type_archive_link($posttype->query_var);
                 if (! empty($archive_link)) {
+                    // @phpstan-ignore binaryOp.invalid, binaryOp.invalid (a registered post type's menu_name label is a string)
                     $html .= '<li><a href="'.$archive_link.'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a>';
                 } elseif (! empty($posttype->rewrite['slug'])) {
+                    // @phpstan-ignore binaryOp.invalid, binaryOp.invalid, binaryOp.invalid (the rewrite slug and the menu_name label are strings)
                     $html .= '<li><a href="'.site_url('/'.$posttype->rewrite['slug'].'/').'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a>';
                 }
             }

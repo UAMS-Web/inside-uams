@@ -28,6 +28,8 @@ function get_uams_breadcrumbs(): string
     } elseif (is_search()) {
         $html .= '<li class="current"><span>Search results for '.get_search_query().'</span>';
     } elseif (is_author()) {
+        // is_author() is true, so the queried object is the author's WP_User.
+        /** @var WP_User $author */
         $author = get_queried_object();
         $html .= '<li class="current"><span> Author: '.$author->display_name.'</span>';
     } elseif (get_queried_object_id() === (int) get_option('page_for_posts')) {
@@ -38,25 +40,34 @@ function get_uams_breadcrumbs(): string
     if (is_category() || is_tax() || is_single() || is_post_type_archive()) {
 
         if (is_post_type_archive() && ! is_tax()) {
+            // On a post type archive get_post_type() is a string, not false.
+            // @phpstan-ignore argument.type
             $posttype = get_post_type_object(get_post_type());
             // $html .=  '<li class="current"><a href="'  . get_post_type_archive_link( $posttype->query_var ) .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
             $html .= '<li class="current"><span>'.$posttype->labels->menu_name.'</span>';
         }
 
         if (is_category()) {
+            // A category archive resolves its own term, so this is a WP_Term, never WP_Error or null.
+            /** @var WP_Term $category */
             $category = get_category(get_query_var('cat'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             $html .= '<li class="current"><span>'.get_cat_name($category->term_id).'</span>';
         }
 
         if (is_tax() && ! is_post_type_archive()) {
+            // On a taxonomy archive the queried term and its taxonomy both exist.
+            /** @var WP_Term $term */
             $term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
+            /** @var WP_Taxonomy $tax */
             $tax = get_taxonomy(get_query_var('taxonomy'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             $html .= '<li class="current"><span>'.$tax->labels->name.': '.$term->name.'</span>';
         }
 
         if (is_tax() && is_post_type_archive()) {
+            // On a taxonomy archive the queried term exists.
+            /** @var WP_Term $tax */
             $tax = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             $html .= '<li class="current"><span>'.$tax->name.'</span>';
@@ -70,7 +81,11 @@ function get_uams_breadcrumbs(): string
             }
 
             if (uams_is_custom_post_type()) {
+                // A single post's type is a string, and uams_is_custom_post_type() means it is registered.
+                // @phpstan-ignore argument.type
                 $posttype = get_post_type_object(get_post_type());
+                // query_var is a string for any type with an archive; false only for types without one.
+                // @phpstan-ignore argument.type
                 $archive_link = get_post_type_archive_link($posttype->query_var);
                 if (! empty($archive_link)) {
                     $html .= '<li><a href="'.$archive_link.'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a>';

@@ -9,11 +9,12 @@ use function Brain\Monkey\Functions\when;
  *
  * The function reads the WordPress conditional tags, so each test names only the
  * tags that differ from a plain view (main site, nothing queried), and
- * breadcrumb_trail() stubs the rest. The expected strings are exact, markup
- * quirks included (several <li> elements are never closed): this is a
- * characterization of existing behavior, and a change to it should be deliberate.
+ * breadcrumb_trail() stubs the rest. The expected strings are exact: every crumb
+ * is one <li> closed by </li> (UAMS-Web/inside-uams#70), and the remaining quirks,
+ * such as the spacing in a current page crumb's class attribute, are pinned as
+ * they are, so a change to the markup should be deliberate.
  */
-const HOME_CRUMB = '<li><a href="http://inside.uams.edu" title="University of Arkansas for Medical Scineces">Home</a></li>';
+const HOME_CRUMB = '<li><a href="http://inside.uams.edu" title="University of Arkansas for Medical Sciences">Home</a></li>';
 
 /**
  * Stubs every function the breadcrumb builder can call, applies the overrides,
@@ -74,7 +75,7 @@ describe('on a sub-site', function (): void {
         ]);
 
         expect($html)->toBe(breadcrumb_nav(
-            '<li><a href="https://inside.uams.edu/sub/" title="Human Resources">Human Resources</a><li>'
+            '<li><a href="https://inside.uams.edu/sub/" title="Human Resources">Human Resources</a></li>'
         ));
     });
 
@@ -87,7 +88,7 @@ describe('on a sub-site', function (): void {
         ]);
 
         expect($html)->toBe(breadcrumb_nav(
-            '<li class="current"><a href="https://inside.uams.edu/sub/" title="HR">HR</a><li>'
+            '<li class="current"><a href="https://inside.uams.edu/sub/" title="HR">HR</a></li>'
         ));
     });
 });
@@ -95,17 +96,17 @@ describe('on a sub-site', function (): void {
 describe('the exclusive views', function (): void {
     it('ends a 404 with Ooops!', function (): void {
         expect(breadcrumb_trail(['is_404' => true]))
-            ->toBe(breadcrumb_nav('<li class="current"><span>Ooops!</span>'));
+            ->toBe(breadcrumb_nav('<li class="current"><span>Ooops!</span></li>'));
     });
 
     it('ends a search with the query', function (): void {
         expect(breadcrumb_trail(['is_search' => true, 'get_search_query' => 'parking']))
-            ->toBe(breadcrumb_nav('<li class="current"><span>Search results for parking</span>'));
+            ->toBe(breadcrumb_nav('<li class="current"><span>Search results for parking</span></li>'));
     });
 
     it('ends an author archive with the display name', function (): void {
         expect(breadcrumb_trail(['is_author' => true, 'get_queried_object' => (object) ['display_name' => 'Pat Lee']]))
-            ->toBe(breadcrumb_nav('<li class="current"><span> Author: Pat Lee</span>'));
+            ->toBe(breadcrumb_nav('<li class="current"><span> Author: Pat Lee</span></li>'));
     });
 
     it('ends the posts page with its title', function (): void {
@@ -115,7 +116,7 @@ describe('the exclusive views', function (): void {
             'get_the_title' => 'News',
         ]);
 
-        expect($html)->toBe(breadcrumb_nav('<li class="current"><span> News </span>'));
+        expect($html)->toBe(breadcrumb_nav('<li class="current"><span> News </span></li>'));
     });
 
     it('prefers a 404 over a search and a search over an author archive', function (): void {
@@ -141,7 +142,7 @@ describe('a category archive', function (): void {
             'get_cat_name' => 'Benefits',
         ]);
 
-        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Benefits</span>'));
+        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Benefits</span></li>'));
     });
 });
 
@@ -153,7 +154,7 @@ describe('a post type archive', function (): void {
             'get_post_type_object' => (object) ['labels' => (object) ['menu_name' => 'Events']],
         ]);
 
-        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Events</span>'));
+        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Events</span></li>'));
     });
 });
 
@@ -166,7 +167,7 @@ describe('a taxonomy archive', function (): void {
             'get_taxonomy' => (object) ['labels' => (object) ['name' => 'Departments']],
         ]);
 
-        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Departments: Nursing</span>'));
+        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Departments: Nursing</span></li>'));
     });
 
     it('ends with the term name alone inside a post type archive', function (): void {
@@ -179,7 +180,7 @@ describe('a taxonomy archive', function (): void {
             'get_post_type_object' => (object) ['labels' => (object) ['menu_name' => 'Events']],
         ]);
 
-        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Nursing</span>'));
+        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Nursing</span></li>'));
     });
 });
 
@@ -192,7 +193,7 @@ describe('a single post', function (): void {
             'get_the_title' => 'Welcome',
         ]);
 
-        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Welcome</span>'));
+        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Welcome</span></li>'));
     });
 
     it('links the first category before the title', function (): void {
@@ -208,8 +209,8 @@ describe('a single post', function (): void {
         ]);
 
         expect($html)->toBe(breadcrumb_nav(
-            '<li><a href="https://inside.uams.edu/category/cat-4/" title="Cat 4">Cat 4</a>'
-            .'<li class="current"><span>Welcome</span>'
+            '<li><a href="https://inside.uams.edu/category/cat-4/" title="Cat 4">Cat 4</a></li>'
+            .'<li class="current"><span>Welcome</span></li>'
         ));
     });
 
@@ -229,8 +230,8 @@ describe('a single post', function (): void {
         ]);
 
         expect($html)->toBe(breadcrumb_nav(
-            '<li><a href="https://inside.uams.edu/events/" title="Events">Events</a>'
-            .'<li class="current"><span>Gala</span>'
+            '<li><a href="https://inside.uams.edu/events/" title="Events">Events</a></li>'
+            .'<li class="current"><span>Gala</span></li>'
         ));
     });
 
@@ -251,8 +252,8 @@ describe('a single post', function (): void {
         ]);
 
         expect($html)->toBe(breadcrumb_nav(
-            '<li><a href="https://inside.uams.edu/happenings/" title="Events">Events</a>'
-            .'<li class="current"><span>Gala</span>'
+            '<li><a href="https://inside.uams.edu/happenings/" title="Events">Events</a></li>'
+            .'<li class="current"><span>Gala</span></li>'
         ));
     });
 
@@ -285,7 +286,7 @@ describe('a single post', function (): void {
             'get_the_title' => 'Gala',
         ]);
 
-        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Gala</span>'));
+        expect($html)->toBe(breadcrumb_nav('<li class="current"><span>Gala</span></li>'));
     });
 });
 

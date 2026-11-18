@@ -20,22 +20,22 @@ function get_uams_breadcrumbs(): string
     /** @var WP_Post $post */
     global $post;
     $ancestors = array_reverse(get_post_ancestors($post->ID));
-    $html = '<li><a href="http://inside.uams.edu" title="University of Arkansas for Medical Scineces">Home</a></li>';
+    $html = '<li><a href="http://inside.uams.edu" title="University of Arkansas for Medical Sciences">Home</a></li>';
     if (! is_main_site()) {
-        $html .= '<li'.(is_front_page() ? ' class="current"' : '').'><a href="'.home_url('/').'" title="'.str_replace('   ', ' ', get_bloginfo('title')).'">'.str_replace('   ', ' ', get_bloginfo('title')).'</a><li>';
+        $html .= '<li'.(is_front_page() ? ' class="current"' : '').'><a href="'.home_url('/').'" title="'.str_replace('   ', ' ', get_bloginfo('title')).'">'.str_replace('   ', ' ', get_bloginfo('title')).'</a></li>';
     }
 
     if (is_404()) {
-        $html .= '<li class="current"><span>Ooops!</span>';
+        $html .= '<li class="current"><span>Ooops!</span></li>';
     } elseif (is_search()) {
-        $html .= '<li class="current"><span>Search results for '.get_search_query().'</span>';
+        $html .= '<li class="current"><span>Search results for '.get_search_query().'</span></li>';
     } elseif (is_author()) {
         // is_author() is true, so the queried object is the author's WP_User.
         /** @var WP_User $author */
         $author = get_queried_object();
-        $html .= '<li class="current"><span> Author: '.$author->display_name.'</span>';
+        $html .= '<li class="current"><span> Author: '.$author->display_name.'</span></li>';
     } elseif (get_queried_object_id() === (int) get_option('page_for_posts')) { // @phpstan-ignore cast.int (the page_for_posts option is an integer string)
-        $html .= '<li class="current"><span> '.get_the_title(get_queried_object_id()).' </span>';
+        $html .= '<li class="current"><span> '.get_the_title(get_queried_object_id()).' </span></li>';
     }
 
     // If the current view is a post type other than page or attachment then the breadcrumbs will be taxonomies.
@@ -48,7 +48,7 @@ function get_uams_breadcrumbs(): string
             $posttype = get_post_type_object(get_post_type());
             // $html .=  '<li class="current"><a href="'  . get_post_type_archive_link( $posttype->query_var ) .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
             // @phpstan-ignore binaryOp.invalid (a registered post type's menu_name label is a string)
-            $html .= '<li class="current"><span>'.$posttype->labels->menu_name.'</span>';
+            $html .= '<li class="current"><span>'.$posttype->labels->menu_name.'</span></li>';
         }
 
         if (is_category()) {
@@ -57,7 +57,7 @@ function get_uams_breadcrumbs(): string
             // @phpstan-ignore argument.type (the cat query var is an integer string)
             $category = get_category(get_query_var('cat'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
-            $html .= '<li class="current"><span>'.get_cat_name($category->term_id).'</span>';
+            $html .= '<li class="current"><span>'.get_cat_name($category->term_id).'</span></li>';
         }
 
         if (is_tax() && ! is_post_type_archive()) {
@@ -70,7 +70,7 @@ function get_uams_breadcrumbs(): string
             $tax = get_taxonomy(get_query_var('taxonomy'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
             // @phpstan-ignore binaryOp.invalid (a registered taxonomy's name label is a string)
-            $html .= '<li class="current"><span>'.$tax->labels->name.': '.$term->name.'</span>';
+            $html .= '<li class="current"><span>'.$tax->labels->name.': '.$term->name.'</span></li>';
         }
 
         if (is_tax() && is_post_type_archive()) {
@@ -79,7 +79,7 @@ function get_uams_breadcrumbs(): string
             // @phpstan-ignore argument.type, argument.type (the term and taxonomy query vars are strings)
             $tax = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
             // $html .=  '<li class="current"><a href="'  . get_category_link( $category->term_id ) .'" title="'. get_cat_name( $category->term_id ).'">'. get_cat_name($category->term_id ) . '</a>';
-            $html .= '<li class="current"><span>'.$tax->name.'</span>';
+            $html .= '<li class="current"><span>'.$tax->name.'</span></li>';
         }
 
         if (is_single()) {
@@ -88,7 +88,7 @@ function get_uams_breadcrumbs(): string
                 // has_category() is true, so the post has at least one category term.
                 /** @var WP_Term $category */
                 $category = array_shift($thecat);
-                $html .= '<li><a href="'.get_category_link($category->term_id).'" title="'.get_cat_name($category->term_id).'">'.get_cat_name($category->term_id).'</a>';
+                $html .= '<li><a href="'.get_category_link($category->term_id).'" title="'.get_cat_name($category->term_id).'">'.get_cat_name($category->term_id).'</a></li>';
             }
 
             if (uams_is_custom_post_type()) {
@@ -101,14 +101,14 @@ function get_uams_breadcrumbs(): string
                 $archive_link = get_post_type_archive_link($posttype->query_var);
                 if (! empty($archive_link)) {
                     // @phpstan-ignore binaryOp.invalid, binaryOp.invalid (a registered post type's menu_name label is a string)
-                    $html .= '<li><a href="'.$archive_link.'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a>';
+                    $html .= '<li><a href="'.$archive_link.'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a></li>';
                 } elseif (! empty($posttype->rewrite['slug'])) {
                     // @phpstan-ignore binaryOp.invalid, binaryOp.invalid, binaryOp.invalid (the rewrite slug and the menu_name label are strings)
-                    $html .= '<li><a href="'.site_url('/'.$posttype->rewrite['slug'].'/').'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a>';
+                    $html .= '<li><a href="'.site_url('/'.$posttype->rewrite['slug'].'/').'" title="'.$posttype->labels->menu_name.'">'.$posttype->labels->menu_name.'</a></li>';
                 }
             }
 
-            $html .= '<li class="current"><span>'.get_the_title($post->ID).'</span>';
+            $html .= '<li class="current"><span>'.get_the_title($post->ID).'</span></li>';
         }
     }
 

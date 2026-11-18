@@ -10,7 +10,7 @@ The function returns one string:
 <nav class='uams-breadcrumbs' aria-label='breadcrumbs'><ul> ... </ul></nav>
 ```
 
-Each crumb is an `<li>`. A crumb that links is an `<a>` with a `title` attribute; the crumb for the view being shown carries `class="current"` and holds a `<span>` instead of a link.
+Each crumb is one `<li>`, closed by `</li>`. In v1.1.1 the site crumb was followed by a second `<li>` and most other crumbs were left open; the release after v1.1.1 closes every one ([UAMS-Web/inside-uams#70](https://github.com/UAMS-Web/inside-uams/issues/70)). A crumb that links is an `<a>` with a `title` attribute; the crumb for the view being shown carries `class="current"` and holds a `<span>` instead of a link.
 
 ## The crumbs on every view
 
@@ -49,4 +49,4 @@ A page titled Forms, whose parent is Human Resources, on a site titled Example S
 </ul></nav>
 ```
 
-The real output has no line breaks between the crumbs. It also differs in its markup until [UAMS-Web/inside-uams#70](https://github.com/UAMS-Web/inside-uams/issues/70) is fixed: the site crumb is followed by `<li>` where `</li>` belongs, and crumbs other than ancestor pages are not closed. Browsers repair both.
+The real output has no line breaks between the crumbs.

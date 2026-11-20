@@ -1,4 +1,4 @@
-Written against v1.1.1.
+Written against v1.1.2.
 
 - [The Themes screen says the parent theme is missing](#the-themes-screen-says-the-parent-theme-is-missing)
 - [The breadcrumb trail starts at the main UAMS website](#the-breadcrumb-trail-starts-at-the-main-uams-website)

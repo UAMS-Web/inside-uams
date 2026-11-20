@@ -1,4 +1,4 @@
-Written against v1.1.1.
+Written against v1.1.2.
 
 The theme carries a class, `Institute_QuickLinks` in `setup/class.uams-quicklinks.php`, that registers a Quick Links menu and serves it as JSON for a script to draw. **It is off:** the line in `functions.php` that loads the class is commented out, so on a site running this theme neither the menu location nor the feed exists.
 

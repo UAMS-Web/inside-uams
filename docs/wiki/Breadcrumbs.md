@@ -1,4 +1,4 @@
-Written against v1.1.1.
+Written against v1.1.2.
 
 The theme prints its own breadcrumb trail in place of the parent's. The parent theme (`uams-2016`) defines `get_uams_breadcrumbs()` only when no theme has defined it yet, and a child theme's `functions.php` loads before the parent's, so this theme's version is the one the parent's `breadcrumbs.php` template prints through `uams_breadcrumbs()`.
 
@@ -10,7 +10,7 @@ The function returns one string:
 <nav class='uams-breadcrumbs' aria-label='breadcrumbs'><ul> ... </ul></nav>
 ```
 
-Each crumb is one `<li>`, closed by `</li>`. In v1.1.1 the site crumb was followed by a second `<li>` and most other crumbs were left open; the release after v1.1.1 closes every one ([UAMS-Web/inside-uams#70](https://github.com/UAMS-Web/inside-uams/issues/70)). A crumb that links is an `<a>` with a `title` attribute; the crumb for the view being shown carries `class="current"` and holds a `<span>` instead of a link.
+Each crumb is one `<li>`, closed by `</li>`. In v1.1.1 the site crumb was followed by a second `<li>` and most other crumbs were left open; v1.1.2 closes every one ([UAMS-Web/inside-uams#70](https://github.com/UAMS-Web/inside-uams/issues/70)). A crumb that links is an `<a>` with a `title` attribute; the crumb for the view being shown carries `class="current"` and holds a `<span>` instead of a link.
 
 ## The crumbs on every view
 

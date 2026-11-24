@@ -1,4 +1,4 @@
-Written against v1.1.1.
+Written against v1.1.2.
 
 The theme's `style.css` loads after the parent's and changes only the header: the thin strip across the top, the UAMS patch, the links and buttons in the strip, and the site title. Everything below the header looks as the parent theme draws it.
 
